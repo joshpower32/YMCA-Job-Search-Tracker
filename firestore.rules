@@ -1,0 +1,56 @@
+rules_version = '2';
+
+// =====================================================================
+//  Firestore security rules — THE real authorization boundary.
+//  Hiding buttons in the UI is cosmetic; these rules are what actually
+//  stop one user from editing or deleting another user's data.
+//
+//  Paste this into: Firebase console > Firestore Database > Rules > Publish
+// =====================================================================
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    // A user is an admin/owner if a doc with their UID exists in /admins.
+    function isAdmin() {
+      return isSignedIn()
+        && exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+
+    // /admins is managed by you in the console, never by clients.
+    match /admins/{uid} {
+      allow read: if true;       // needed so the app can show the Admin badge
+      allow write: if false;     // add/remove admins manually in the console
+    }
+
+    match /dashboards/{dashboardId} {
+      // Public: anyone can browse dashboards (even signed out).
+      allow read: if true;
+
+      // Create: must be signed in and must stamp yourself as the owner.
+      allow create: if isSignedIn()
+        && request.resource.data.ownerUid == request.auth.uid
+        && request.resource.data.title is string
+        && request.resource.data.title.size() > 0;
+
+      // Update / delete: only the owner, or an admin.
+      allow update, delete: if isSignedIn()
+        && (resource.data.ownerUid == request.auth.uid || isAdmin());
+
+      // Entries (the job applications) live under each dashboard.
+      match /entries/{entryId} {
+        // Public read.
+        allow read: if true;
+
+        // Write only if you own the PARENT dashboard, or you're an admin.
+        allow create, update, delete: if isSignedIn() && (
+          get(/databases/$(database)/documents/dashboards/$(dashboardId)).data.ownerUid == request.auth.uid
+          || isAdmin()
+        );
+      }
+    }
+  }
+}
