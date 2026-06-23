@@ -1,5 +1,6 @@
-YMCA Job Search Tracker — Public Dashboards (Unofficial) (https://joshpower32.github.io/YMCA-Job-Search-Tracker/index.html#dashboards) 
+YMCA Job Search Tracker — Public Dashboards (Unofficial)  
 A small web app for tracking job applications. Each user can create their own public dashboard with a custom title; anyone can browse every dashboard, but only the creator (or an admin) can add, edit, or delete entries on it.
+https://joshpower32.github.io/YMCA-Job-Search-Tracker/index.html#dashboards
 
 Disclaimer: This is an independent personal project built for practice and personal job-search use. It is not affiliated with, endorsed by, sponsored by, or connected to YMCA or any of its member associations. All YMCA names and marks belong to their respective owners.
 
