@@ -74,7 +74,7 @@ function render() {
     const canManage = mine || auth.isAdmin;
     const count = d.entryCount || 0;
     return `
-    <article class="dash-card">
+    <article class="dash-card" data-href="dashboard.html?id=${encodeURIComponent(d.id)}" role="link" tabindex="0" aria-label="Open ${esc(d.title)}">
       <div class="dash-card-top">
         <h3>${esc(d.title)}</h3>
         ${mine ? `<span class="mine-tag">Yours</span>` : ""}
@@ -100,6 +100,22 @@ function render() {
     b.addEventListener("click", () => openRename(b.dataset.rename, b.dataset.title)));
   grid.querySelectorAll("[data-delete]").forEach((b) =>
     b.addEventListener("click", () => removeDashboard(b.dataset.delete, b.dataset.title)));
+
+  // Make the whole card clickable/tappable to open, while letting the
+  // inner buttons (Open / Rename / Delete) handle their own clicks.
+  grid.querySelectorAll(".dash-card[data-href]").forEach((card) => {
+    card.addEventListener("click", (e) => {
+      if (e.target.closest("button, a")) return;
+      window.location.href = card.dataset.href;
+    });
+    card.addEventListener("keydown", (e) => {
+      if (e.target !== card) return;
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        window.location.href = card.dataset.href;
+      }
+    });
+  });
 }
 
 // ---------- create ----------

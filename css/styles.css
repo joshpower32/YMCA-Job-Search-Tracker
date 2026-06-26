@@ -281,8 +281,11 @@ h1, h2, h3 { font-family: var(--font-display); margin: 0; line-height: 1.15; let
   flex-direction: column;
   gap: 12px;
   animation: rise .35s ease both;
+  cursor: pointer;
+  transition: border-color .15s ease, box-shadow .15s ease, transform .15s ease;
 }
-.dash-card:hover { border-color: var(--line-strong); }
+.dash-card[data-href]:hover { border-color: var(--line-strong); box-shadow: var(--shadow-md, 0 6px 20px rgba(0,0,0,.12)); transform: translateY(-2px); }
+.dash-card:focus-visible { outline: 2px solid var(--brand, #2563eb); outline-offset: 2px; }
 .dash-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
 .dash-card h3 { font-size: 18px; font-weight: 800; letter-spacing: -.01em; }
 .dash-card .owner-row { font-size: 13px; color: var(--slate); display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
