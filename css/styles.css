@@ -541,7 +541,17 @@ table.ledger {
 
 @media (max-width: 540px) {
   .brand-sub { display: none; }
-  .auth-popover { width: calc(100vw - 40px); right: -8px; }
+
+  /* Sign-in popover: full-width card with even 16px gutters */
+  .auth-popover { width: calc(100vw - 32px); right: 0; padding: 18px; }
+
+  /* 16px inputs stop iOS Safari auto-zooming when a field is focused */
+  .input, .select, .textarea { font-size: 16px; padding: 12px; }
+
+  /* Stack sign-in / create-account into full-width, comfortable tap targets */
+  .auth-row { flex-direction: column; gap: 10px; }
+  .auth-row .btn { padding: 12px 16px; }
+
   .form-grid .span-2 { grid-column: auto; }
 }
 
